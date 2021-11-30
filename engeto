@@ -1,0 +1,25 @@
+package com.company;
+
+import java.time.LocalDate;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        String client = "Martin Civín";
+
+        int sales = 12;
+
+        String city = "Praha";
+
+        double consumption = 9.8;
+
+        double cableLenght = 32500.0;
+
+        LocalDate birthDate = LocalDate.of(1994, 11 , 15);
+
+        String registrationPlate = "3AN 8198";
+
+        String ipAdress = "163.121.12.50";
+    }
+}
