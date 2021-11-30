@@ -1,0 +1,287 @@
+package com.company;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+public class Booking {
+    private Guest mainGuest;
+    private List<Guest> otherGuest = new ArrayList<>();
+    private Room room;
+    private LocalDate begin;
+    private LocalDate end;
+    private TypeOfStay type;
+
+    public Booking(Guest mainGuest, Room room, LocalDate begin, LocalDate end, TypeOfStay type) {
+        this.mainGuest = mainGuest;
+        this.room = room;
+        this.begin = begin;
+        this.end = end;
+        this.type = type;
+    }
+
+    public Booking(Guest mainGuest, Room room) {
+        this(mainGuest, room, LocalDate.now(), LocalDate.now().plusDays(7), TypeOfStay.HOLIDAY);
+    }
+
+    public Room getRoom() {
+        return room;
+    }
+
+    public void setRoom(Room room) {
+        this.room = room;
+    }
+
+    public LocalDate getBegin() {
+        return begin;
+    }
+
+    public void setBegin(LocalDate begin) {
+        this.begin = begin;
+    }
+
+    public LocalDate getEnd() {
+        return end;
+    }
+
+    public void setEnd(LocalDate end) {
+        this.end = end;
+    }
+
+
+    public Guest getMainGuest() {
+        return mainGuest;
+    }
+
+    public void setMainGuest(Guest mainGuest) {
+        this.mainGuest = mainGuest;
+    }
+
+    public TypeOfStay getType() {
+        return type;
+    }
+
+    public void setType(TypeOfStay type) {
+        this.type = type;
+    }
+
+    public void addGuest(Guest newGuest) {
+        otherGuest.add(newGuest);
+    }
+
+    public void removeGuest(Guest guest) {
+        otherGuest.remove(guest);
+    }
+
+    public void clearOtherGuests() {
+        otherGuest.clear();
+    }
+
+    public String getDescription() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Booking for ");
+        sb.append(mainGuest.getFullName());
+        sb.append(",type ");
+        sb.append(type.description);
+        sb.append(",begin date ");
+        sb.append(begin.toString());
+        sb.append(",end date ");
+        sb.append(end.toString());
+        if (otherGuest.size() > 0) {
+            sb.append(",other guests ");
+            for (int i = 0; i < otherGuest.size(); i++) {
+                sb.append(otherGuest.get(i).getFullName());
+                if (i != otherGuest.size() - 1) {
+                    sb.append(", ");
+                }
+            }
+        }
+
+
+        return sb.toString();
+    }
+}
+
+
+package com.company;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+public class Bookings {
+    private final List<Booking> bookings = new LinkedList<>();
+
+    public void addBooking(Booking newBooking) {
+        bookings.add(newBooking);
+    }
+
+    public void printBookings() {
+        for (Booking booking : bookings) {
+            System.out.println(booking.getDescription());
+        }
+    }
+}
+
+package com.company;
+
+import java.time.LocalDate;
+
+public class Guest {
+
+    private String name;
+    private String surname;
+    private LocalDate birthDate;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public LocalDate getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public Guest(String name, String surname, LocalDate birthDate) {
+        this.name = name;
+        this.surname = surname;
+        this.birthDate = birthDate;
+    }
+
+    public String getDescription() {
+        return "Host: " + name + " " + surname + " (" + birthDate.toString() + ")";
+    }
+
+    public String getFullName() {
+        return getName() + " " + getSurname();
+    }
+
+
+}
+
+package com.company;
+
+import java.time.LocalDate;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        Guest adela = new Guest("Adela", "Malíková", LocalDate.of(1993, 3, 13));
+        Guest jan = new Guest("Jan", "Dvořáček", LocalDate.of(1995, 5, 5));
+        System.out.println(adela.getDescription());
+        System.out.println(jan.getDescription());
+
+        Room room1 = new Room(1, 1, true, true, 1000);
+        System.out.println(room1.getDescription());
+        Room room2 = new Room(2, 1, true, true, 1000);
+        System.out.println(room2.getDescription());
+        Room room3 = new Room(3, 3, false, true, 2400);
+        System.out.println(room3.getDescription());
+
+        Bookings bookings = new Bookings();
+
+        Booking bookingAdela = new Booking(adela, room1, LocalDate.of(2021, 7, 19), LocalDate.of(2021, 7, 26), TypeOfStay.HOLIDAY);
+        bookings.addBooking(bookingAdela);
+
+        Booking bookingSpolecny = new Booking(adela, room3, LocalDate.of(2021, 9, 1), LocalDate.of(2021, 9, 14), TypeOfStay.WORKING);
+        bookingSpolecny.addGuest(jan);
+        bookings.addBooking(bookingSpolecny);
+
+        bookings.printBookings();
+    }
+}
+
+package com.company;
+
+public class Room {
+    private int roomId;
+    private int capacity;
+    private boolean hasBalcony;
+    private boolean hasviewOfTheSea;
+    private int pricePerNight;
+    public int getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(int roomId) {
+        this.roomId = roomId;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
+
+    public boolean isHasBalcony() {
+        return hasBalcony;
+    }
+
+    public void setHasBalcony(boolean hasBalcony) {
+        this.hasBalcony = hasBalcony;
+    }
+
+    public boolean isHasviewOfTheSea() {
+        return hasviewOfTheSea;
+    }
+
+    public void setHasviewOfTheSea(boolean hasviewOfTheSea) {
+        this.hasviewOfTheSea = hasviewOfTheSea;
+    }
+
+    public int getPricePerNight() {
+        return pricePerNight;
+    }
+
+    public void setPricePerNight(int pricePerNight) {
+        this.pricePerNight = pricePerNight;
+    }
+
+    public Room(int roomId, int capacity, boolean hasBalcony, boolean hasviewOfTheSea, int pricePerNight) {
+        this.roomId = roomId;
+        this.capacity = capacity;
+        this.hasBalcony = hasBalcony;
+        this.hasviewOfTheSea = hasviewOfTheSea;
+        this.pricePerNight = pricePerNight;
+    }
+
+    public String getDescription() {
+        return "Pokoj č. " + roomId + ":" + capacity + "míst" + pricePerNight + "Kč/noc";
+    }
+}
+
+package com.company;
+
+public enum TypeOfStay {
+
+    WORKING("working"), HOLIDAY("holiday");
+
+    final String description;
+
+    TypeOfStay(String description) {
+        this.description = description;
+    }
+    @Override
+    public String toString(){
+        return description;
+    }
+
+}
